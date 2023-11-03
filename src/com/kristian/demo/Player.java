@@ -11,6 +11,42 @@ public class Player {
     private int level;
     private int baseDamage;
 
+    public Player(int strength, int intelligence, int agility, int health, int level, int baseDamage) {
+        this.strength = strength;
+        this.intelligence = intelligence;
+        this.agility = agility;
+        this.health = health;
+        this.level = level;
+        this.baseDamage = baseDamage;
+    }
+
+    // Raden under kan finnas i iCombat också,kske bättre tom.
+    public void takeDamage(int damage) {
+
+        setHealth(getHealth() - damage );
+
+    }
+
+    public void calculateExperienceToLevel(int amountOfExp){
+
+        // amountOfEXP = 100
+        for (int i = amountOfExp; i > 0 ; i--) {
+            setExperience(getExperience() + 1);
+
+            // Level up att 100
+            if (getExperience() == 100) {
+                setLevel(getLevel() +1);
+                setExperience(0);
+            }
+        }
+        System.out.println("how much exp does player have?");
+        System.out.println(getExperience());
+
+        System.out.println("player level?");
+        System.out.println(getLevel());
+
+    }
+
     public void getStatus() {
         System.out.printf("Name: %s %n", name);
         System.out.printf("Strength: %d %n", strength);
