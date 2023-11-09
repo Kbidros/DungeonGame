@@ -13,16 +13,17 @@ class PlayerTest {
             5,
             50,
             2,
-            5
+            5,
+            50
     );
 
     @Test
     public void reducePlayerHealth() {
         player.takeDamage(5);
-        System.out.println(player.getHealth());
+        System.out.println(player.getCurrentHP());
 
 
-        assertEquals(45, player.getHealth());
+        assertEquals(45, player.getCurrentHP());
     }
 
     @Test
@@ -36,8 +37,8 @@ class PlayerTest {
     @Test
     public void checkStartingHealth() {
 
-        System.out.println(player.getHealth());
-        assertEquals(50, player.getHealth());
+        System.out.println(player.getMaxHP());
+        assertEquals(50, player.getMaxHP());
 
 
     }

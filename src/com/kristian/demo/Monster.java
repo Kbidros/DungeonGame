@@ -3,17 +3,26 @@ package com.kristian.demo;
 public class Monster {
 
     private int strength;
-    private int health;
+    private int maxHP;
+    private int currentHP;
     private int baseDamage;
 
-    public Monster(int strength, int health, int baseDamage) {
+    public Monster(int strength, int maxHP, int currentHP, int baseDamage) {
         this.strength = strength;
-        this.health = health;
+        this.maxHP = maxHP;
+        this.currentHP = currentHP;
         this.baseDamage = baseDamage;
     }
 
     public void takeDamage(int damage) {
-        setHealth(getHealth() - damage );
+        setCurrentHP(Math.max(0, getCurrentHP() - damage ));
+
+        if (getCurrentHP() == 0) {
+            System.out.println("Monster is dead!");
+        } else {
+            System.out.println(" took " + damage + " damage. Remaining health: ");
+        }
+
     }
 
     public int getStrength() {
@@ -24,12 +33,20 @@ public class Monster {
         this.strength = strength;
     }
 
-    public int getHealth() {
-        return health;
+    public int getMaxHP() {
+        return maxHP;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void setMaxHP(int maxHP) {
+        this.maxHP = maxHP;
+    }
+
+    public int getCurrentHP() {
+        return currentHP;
+    }
+
+    public void setCurrentHP(int currentHP) {
+        this.currentHP = currentHP;
     }
 
     public int getBaseDamage() {
@@ -40,3 +57,5 @@ public class Monster {
         this.baseDamage = baseDamage;
     }
 }
+
+

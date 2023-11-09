@@ -12,12 +12,13 @@ public class Main {
 
         // Instantiate Objects
         Player player = new Player(
-                5,
+                50,
                 5,
                 5,
                 50,
                 1,
-                5
+                5,
+                50
 
         );
 
@@ -32,7 +33,7 @@ public class Main {
 
         do {
 
-            System.out.println("1.Fight\n2.Status\n3.Exit Game\n0. Debug Experience");
+            System.out.println("1.Look for monsters and fight!\n2.Status\n3.Exit Game\n0. Debug Experience");
             switch (sc.nextLine()) {
                 case "1" -> fightMenu(player);
                 case "2" -> player.getStatus();
@@ -48,13 +49,15 @@ public class Main {
 
     public static void fightMenu(Player player) {
 
-        Monster monster = new Monster(5,20,5);
+        Monster monster = new Monster(5,20,20,5);
 
         // Fight Menu
         do {
 
-            System.out.println("----Monster approaching----");
-            System.out.println("Monster: " + monster.getHealth());
+            System.out.println( YELLOW + "********* Monster approaching *********" + RESET);
+            System.out.println(RED + "Monster health: " + monster.getCurrentHP() + "/" + monster.getMaxHP() + RESET);
+            System.out.println(GREEN + "Monster strength: " + monster.getStrength() + RESET);
+            System.out.println(BLUE + "Monster baseDamage: " + monster.getBaseDamage() + RESET);
 
             System.out.println("1.Battle\n2.Status\n3.Flee");
 
