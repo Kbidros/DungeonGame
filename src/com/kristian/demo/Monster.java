@@ -20,7 +20,7 @@ public class Monster {
         if (getCurrentHP() == 0) {
             System.out.println("Monster is dead!");
         } else {
-            System.out.println(" took " + damage + " damage. Remaining health: ");
+            System.out.println("Monster took " + damage + " damage. Remaining health: " + getCurrentHP());
         }
 
     }

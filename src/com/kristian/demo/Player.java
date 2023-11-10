@@ -21,10 +21,13 @@ public class Player {
         this.currentHP = currentHP;
     }
 
-    // Raden under kan finnas i iCombat också,kske bättre tom.
     public void takeDamage(int damage) {
-
-        setMaxHP(getCurrentHP() - damage );
+        if (getCurrentHP() == 0) {
+            System.out.println("You're dead!");
+        } else {
+            System.out.println(getName() +  " took " + damage + " damage. Remaining health: " + getCurrentHP());
+        }
+        setCurrentHP(getCurrentHP() - damage );
 
     }
 
