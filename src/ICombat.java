@@ -1,6 +1,6 @@
 public interface ICombat {
 
-    void attack();
+    void fighting();
 
     static void calculateDamage(int damage) {
 

@@ -1,5 +1,7 @@
 package com.kristian.demo;
 
+import java.util.Random;
+
 public class Player {
     private String name;
     private int strength;
@@ -21,35 +23,41 @@ public class Player {
         this.currentHP = currentHP;
     }
 
-    public void takeDamage(int damage) {
-        if (getCurrentHP() == 0) {
-            System.out.println("You're dead!");
-        } else {
-            System.out.println(getName() +  " took " + damage + " damage. Remaining health: " + getCurrentHP());
-        }
-        setCurrentHP(getCurrentHP() - damage );
-
+    public int calculateAttackDamage() {
+        return (getBaseDamage() + getStrength());
     }
 
-    public void calculateExperienceToLevel(int amountOfExp){
 
-        // amountOfEXP = 100
-        for (int i = amountOfExp; i > 0 ; i--) {
-            setExperience(getExperience() + 1);
+    public void takeDamageFromMonster(int damage) {
+        currentHP -= damage;
+        if (currentHP <0) {
+            currentHP= 0;
+        }
+    }
 
+    public void experienceToLevelUp(int amountOfExp) {
+
+        experience += amountOfExp;
+        if (experience >= 100) {
+        }
+    }
+        private void levelingUp() {
             // Level up att 100
             if (getExperience() == 100) {
                 setLevel(getLevel() +1);
-                setExperience(0);
+                setExperience(-100);
+                setMaxHP(getMaxHP() +15);
+                setCurrentHP(getMaxHP());
+                setStrength(getStrength() +10);
+                setBaseDamage(getBaseDamage() +5);
+                setIntelligence(getIntelligence() +5);
+                setAgility(getLevel() +5);
+                System.out.println("Congratulations! You've reached a new level " + getName() + ". " + "Your level is now " + getLevel() + "!");
+
             }
+
         }
-        System.out.println("how much exp does player have?");
-        System.out.println(getExperience());
 
-        System.out.println("player level?");
-        System.out.println(getLevel());
-
-    }
 
     public void getStatus() {
         System.out.printf("Name: %s %n", name);
@@ -65,6 +73,10 @@ public class Player {
 
 
     }
+    public boolean playerIsAlive() {
+        return currentHP > 0;
+    }
+
 
     public String getName() {
         return name;

@@ -19,7 +19,7 @@ class PlayerTest {
 
     @Test
     public void reducePlayerHealth() {
-        player.takeDamage(5);
+        player.takeDamage();
         System.out.println(player.getCurrentHP());
 
 
