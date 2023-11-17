@@ -2,7 +2,9 @@ package com.kristian.demo;
 
 import java.util.Random;
 
-public class Player {
+import static com.kristian.demo.Colors.*;
+
+public class Player implements ICombat{
     private String name;
     private int strength;
     private int intelligence;
@@ -23,8 +25,13 @@ public class Player {
         this.currentHP = currentHP;
     }
 
+    @Override
+    public void fighting () {
+
+    }
+
     public int calculateAttackDamage() {
-        return (getBaseDamage() + getStrength());
+        return getBaseDamage() + (getStrength() + 10);
     }
 
 
@@ -41,38 +48,42 @@ public class Player {
         if (experience >= 100) {
         }
     }
-        private void levelingUp() {
+        void levelingUp() {
             // Level up att 100
             if (getExperience() == 100) {
                 setLevel(getLevel() +1);
-                setExperience(-100);
+                setExperience(0);
                 setMaxHP(getMaxHP() +15);
                 setCurrentHP(getMaxHP());
                 setStrength(getStrength() +10);
                 setBaseDamage(getBaseDamage() +5);
                 setIntelligence(getIntelligence() +5);
                 setAgility(getLevel() +5);
-                System.out.println("Congratulations! You've reached a new level " + getName() + ". " + "Your level is now " + getLevel() + "!");
+                System.out.println(CYAN + "Congratulations! You've reached a new level " + getName() + ". " + "Your level is now " + getLevel() + "!" + RESET);
 
             }
 
         }
+        @Override
+        public boolean didDodge() {
+        int dodgeThreshold = getAgility() * 2;
+        int randomValue = new Random().nextInt(100) + getAgility();
+        return randomValue <= dodgeThreshold;
+    }
 
 
     public void getStatus() {
-        System.out.printf("Name: %s %n", name);
-        System.out.printf("Strength: %d %n", strength);
-        System.out.printf("Intelligence: %d %n", intelligence);
-        System.out.printf("Agility: %d %n", agility);
-        System.out.printf("Health: %d %n", maxHP);
-        System.out.printf("Experience: %d %n", experience);
-        System.out.printf("Level: %d %n", level);
-        System.out.printf("BaseDamage: %d %n", baseDamage);
-        System.out.printf("Current HP: %d %n", currentHP);
-
-
-
+        System.out.printf(CYAN + "Name: %s %n", name);
+        System.out.printf(RED + "Current HP: %d/%d %n", currentHP, maxHP);
+        System.out.printf(PURPLE + "Strength: %d %n", strength);
+        System.out.printf(PURPLE + "Intelligence: %d %n", intelligence);
+        System.out.printf(PURPLE + "Agility: %d %n", agility);
+        System.out.printf(CYAN + "Experience: %d %n", experience);
+        System.out.printf(CYAN + "Level: %d %n", level);
+        System.out.printf(YELLOW + "BaseDamage: %d %n" + RESET, baseDamage);
     }
+
+
     public boolean playerIsAlive() {
         return currentHP > 0;
     }

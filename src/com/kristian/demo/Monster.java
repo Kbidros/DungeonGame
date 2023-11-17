@@ -2,13 +2,13 @@ package com.kristian.demo;
 
 import java.util.Random;
 
-public class Monster {
+public class Monster implements ICombat{
 
-    private int strength;
-    private int maxHP;
+    private final int strength;
+    private final int maxHP;
     private int currentHP;
-    private int baseDamage;
-    private String name;
+    private final int baseDamage;
+    private final String name;
 
     public Monster(int strength, int maxHP, int currentHP, int baseDamage, String name) {
         this.strength = strength;
@@ -17,9 +17,20 @@ public class Monster {
         this.currentHP = currentHP;
         this.name = name;
 
+
+    }
+    @Override
+    public void fighting() {
+
+
     }
 
-    public int calculateDamageToPlayer() {
+    @Override
+    public boolean didDodge() {
+        return false;
+    }
+
+    public int calculateAttackDamage() {
         return (getBaseDamage() + getStrength());
     }
 
@@ -37,41 +48,22 @@ public class Monster {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getStrength () {
             return strength;
-        }
-
-        public void setStrength ( int strength){
-            this.strength = strength;
         }
 
         public int getMaxHP () {
             return maxHP;
         }
 
-        public void setMaxHP ( int maxHP){
-            this.maxHP = maxHP;
-        }
-
         public int getCurrentHP () {
             return currentHP;
-        }
-
-        public void setCurrentHP ( int currentHP){
-            this.currentHP = currentHP;
         }
 
         public int getBaseDamage () {
             return baseDamage;
         }
 
-        public void setBaseDamage ( int baseDamage){
-            this.baseDamage = baseDamage;
-        }
-    }
+}
 
 

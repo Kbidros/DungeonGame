@@ -1,9 +1,6 @@
 package com.kristian.demo;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import static com.kristian.demo.Colors.*;
 
 public class Main {
 
@@ -20,10 +17,11 @@ public class Main {
         );
         ArrayList<Monster> monsters = new ArrayList<>();
 
-        monsters.add(new Monster(4,20,20,6, "Giant Mosquito"));
-        monsters.add(new Monster(7,35,35,13, "One-eyed pirate"));
-        monsters.add(new Monster(12,50,50,19, "Scorpion"));
-        monsters.add(new Monster(22,68,68,28, "King Black Dragon"));
+        monsters.add(new Monster(2,20,20,3, "Giant Mosquito"));
+        monsters.add(new Monster(5,35,35,6, "Zombie"));
+        monsters.add(new Monster(7,50,50,9, "King Cobra"));
+        monsters.add(new Monster(12,68,68,14, "Black Dragon"));
+        monsters.add(new Monster(17,75,75,20, "Bloodthirsty Vampire"));
 
         Game game = new Game(player, monsters);
         game.startGame();
