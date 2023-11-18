@@ -1,8 +1,6 @@
 package com.kristian.demo;
 
-import java.util.Random;
-
-public class Monster implements ICombat{
+public class Monster implements ICombat {
 
     private final int strength;
     private final int maxHP;
@@ -16,13 +14,6 @@ public class Monster implements ICombat{
         this.maxHP = maxHP;
         this.currentHP = currentHP;
         this.name = name;
-
-
-    }
-    @Override
-    public void fighting() {
-
-
     }
 
     @Override
@@ -30,8 +21,9 @@ public class Monster implements ICombat{
         return false;
     }
 
+    @Override
     public int calculateAttackDamage() {
-        return (getBaseDamage() + getStrength());
+        return ((getBaseDamage() / 2) + getStrength());
     }
 
     public void takeDamageFromPlayer(int damage) {
@@ -40,6 +32,7 @@ public class Monster implements ICombat{
             currentHP = 0;
         }
     }
+
     public boolean monsterIsAlive() {
         return currentHP > 0;
     }
@@ -48,22 +41,21 @@ public class Monster implements ICombat{
         return name;
     }
 
-    public int getStrength () {
-            return strength;
-        }
+    public int getStrength() {
+        return strength;
+    }
 
-        public int getMaxHP () {
-            return maxHP;
-        }
+    public int getMaxHP() {
+        return maxHP;
+    }
 
-        public int getCurrentHP () {
-            return currentHP;
-        }
+    public int getCurrentHP() {
+        return currentHP;
+    }
 
-        public int getBaseDamage () {
-            return baseDamage;
-        }
-
+    public int getBaseDamage() {
+        return baseDamage;
+    }
 }
 
 

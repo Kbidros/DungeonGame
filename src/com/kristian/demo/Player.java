@@ -4,7 +4,7 @@ import java.util.Random;
 
 import static com.kristian.demo.Colors.*;
 
-public class Player implements ICombat{
+public class Player implements ICombat {
     private String name;
     private int strength;
     private int intelligence;
@@ -25,20 +25,24 @@ public class Player implements ICombat{
         this.currentHP = currentHP;
     }
 
+    //ICombat fight and dodge
+
     @Override
-    public void fighting () {
-
-    }
-
     public int calculateAttackDamage() {
         return getBaseDamage() + (getStrength() + 10);
     }
 
+    @Override
+    public boolean didDodge() {
+        int dodgeHit = getAgility() * 2;
+        int randomValue = new Random().nextInt(100) + getAgility();
+        return randomValue <= dodgeHit;
+    }
 
     public void takeDamageFromMonster(int damage) {
         currentHP -= damage;
-        if (currentHP <0) {
-            currentHP= 0;
+        if (currentHP < 0) {
+            currentHP = 0;
         }
     }
 
@@ -48,29 +52,27 @@ public class Player implements ICombat{
         if (experience >= 100) {
         }
     }
-        void levelingUp() {
-            // Level up att 100
-            if (getExperience() == 100) {
-                setLevel(getLevel() +1);
-                setExperience(0);
-                setMaxHP(getMaxHP() +15);
-                setCurrentHP(getMaxHP());
-                setStrength(getStrength() +10);
-                setBaseDamage(getBaseDamage() +5);
-                setIntelligence(getIntelligence() +5);
-                setAgility(getLevel() +5);
-                System.out.println(CYAN + "Congratulations! You've reached a new level " + getName() + ". " + "Your level is now " + getLevel() + "!" + RESET);
 
-            }
-
+    void levelingUp() {
+        // Level up once you reach 100 exp.
+        if (getExperience() == 100) {
+            setLevel(getLevel() + 1);
+            setExperience(0);
+            setMaxHP(getMaxHP() + 15);
+            setCurrentHP(getMaxHP());
+            setStrength(getStrength() + 10);
+            setBaseDamage(getBaseDamage() + 5);
+            setIntelligence(getIntelligence() + 5);
+            setAgility(getLevel() + 5);
+            System.out.println(CYAN + "Congratulations! You've reached a new level " + getName() + ". " + "Your level is now " + getLevel() + "!" + RESET);
         }
-        @Override
-        public boolean didDodge() {
-        int dodgeThreshold = getAgility() * 2;
-        int randomValue = new Random().nextInt(100) + getAgility();
-        return randomValue <= dodgeThreshold;
     }
 
+    public boolean doubleHit() {
+        int doubleHitChance = getIntelligence() * 2;
+        int randomValue = new Random().nextInt(100) + getIntelligence();
+        return randomValue <= doubleHitChance;
+    }
 
     public void getStatus() {
         System.out.printf(CYAN + "Name: %s %n", name);
@@ -83,11 +85,9 @@ public class Player implements ICombat{
         System.out.printf(YELLOW + "BaseDamage: %d %n" + RESET, baseDamage);
     }
 
-
     public boolean playerIsAlive() {
         return currentHP > 0;
     }
-
 
     public String getName() {
         return name;
@@ -152,12 +152,12 @@ public class Player implements ICombat{
     public void setBaseDamage(int baseDamage) {
         this.baseDamage = baseDamage;
     }
-    public int getCurrentHP () {
+
+    public int getCurrentHP() {
         return currentHP;
     }
 
     public void setCurrentHP(int currentHP) {
         this.currentHP = currentHP;
     }
-
 }

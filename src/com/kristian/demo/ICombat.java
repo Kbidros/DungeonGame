@@ -1,6 +1,6 @@
 package com.kristian.demo;
 
 public interface ICombat {
-    void fighting();
+    int calculateAttackDamage();
     boolean didDodge();
 }

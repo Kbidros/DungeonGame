@@ -11,37 +11,31 @@ class PlayerTest {
             5,
             5,
             5,
-            50,
-            2,
+            80,
+            1,
             5,
-            50
+            80
     );
 
     @Test
-    public void reducePlayerHealth() {
-        player.takeDamage();
-        System.out.println(player.getCurrentHP());
+    public void testPlayerLoses() {
+        player.takeDamageFromMonster(player.getMaxHP());
 
-
-        assertEquals(45, player.getCurrentHP());
+        assertFalse(player.playerIsAlive());
     }
 
     @Test
-    public void reducePlayerLevel(){
-        player.setLevel(player.getLevel() -1);
+    public void increasePlayerLevel(){
+        player.setLevel(player.getLevel() + 1);
 
-        assertEquals(1, player.getLevel());
-
+        assertEquals(2, player.getLevel());
     }
 
     @Test
-    public void checkStartingHealth() {
+    public void checkActualDamage() {
+        int expectedDamage = player.getBaseDamage() + (player.getStrength() + 10);
+        int actualDamage = player.calculateAttackDamage();
 
-        System.out.println(player.getMaxHP());
-        assertEquals(50, player.getMaxHP());
-
-
+        assertEquals(expectedDamage, actualDamage);
     }
-
-
 }

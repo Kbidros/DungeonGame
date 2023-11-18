@@ -35,7 +35,7 @@ public class Game {
         System.out.println(GREEN + "What's your name soldier?" + RESET);
 
         player.setName(sc.nextLine());
-        System.out.println("Alright " + player.getName() + "," + " what would you like to do?");
+        System.out.println(CYAN + "Alright " + player.getName() + "," + " what would you like to do?" + RESET);
 
         boolean quit = false;
         do {
@@ -58,6 +58,7 @@ public class Game {
 
 
     }
+
     public void act(Player player) {
 
         System.out.println(YELLOW + "<<<<<<<<<<<<<<<<<<<< Monster approaching >>>>>>>>>>>>>>>>>>>>" + RESET);
@@ -99,14 +100,13 @@ public class Game {
         int fleeChance = player.getAgility() * 3;
 
         if (randomChance <= fleeChance) {
-            System.out.println(GREEN + "You successfully flee from " + monster.getName() + "!" + RESET);
+            System.out.println(GREEN + "You successfully fled from " + monster.getName() + "!" + RESET);
             return true;
         } else {
             System.out.println(RED + "You failed to flee! The battle continues." + RESET);
             return false;
         }
     }
-
 
 
     public static void fighting(Player player, Monster monster) {
@@ -116,7 +116,12 @@ public class Game {
         int playerDamage = player.calculateAttackDamage();
         System.out.println(BLUE + "You swing your sword ⚔️" + RESET);
         sleepForMilliseconds(1500);
-        System.out.println(GREEN + "Hit success! You did " + playerDamage + " damage to " + monster.getName() + "!"+ RESET);
+        if (player.doubleHit()) {
+            playerDamage *= 2;
+            System.out.println(GREEN + "Double hit! You managed to double your damage! You did " + playerDamage + " damage to " + monster.getName() + "!" + RESET);
+        } else {
+            System.out.println(GREEN + "Hit success! You did " + playerDamage + " damage to " + monster.getName() + "!" + RESET);
+        }
         System.out.println(YELLOW + "*********************************************" + RESET);
         sleepForMilliseconds(1500);
 
@@ -127,6 +132,7 @@ public class Game {
         // Kontrollera om monstret är dött
         if (monster.getCurrentHP() == 0) {
             System.out.println(GREEN + "Monster is DEAD!" + RESET);
+            System.out.println(GREEN + "You gained 50 EXP!" + RESET);
 
             player.experienceToLevelUp(50); // Simulera att spelaren får 10 erfarenhetspoäng
             player.levelingUp(); // Kontrollera om spelaren når nästa nivå
@@ -158,6 +164,6 @@ public class Game {
         // Uppdatera spelarens och monstrets hälsa
 
         System.out.println(CYAN + "Your health: " + player.getCurrentHP() + "/" + player.getMaxHP() + RESET);
-        System.out.println(CYAN +"Monster's health: " + monster.getCurrentHP() + "/" + monster.getMaxHP() + RESET);
+        System.out.println(CYAN + "Monster's health: " + monster.getCurrentHP() + "/" + monster.getMaxHP() + RESET);
     }
 }
