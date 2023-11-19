@@ -16,6 +16,8 @@ public class Monster implements ICombat {
         this.name = name;
     }
 
+    //ICombat fight and dodge
+
     @Override
     public boolean didDodge() {
         return false;
@@ -26,6 +28,7 @@ public class Monster implements ICombat {
         return ((getBaseDamage() / 2) + getStrength());
     }
 
+    // Monster taking damage from player
     public void takeDamageFromPlayer(int damage) {
         currentHP -= damage;
         if (currentHP < 0) {

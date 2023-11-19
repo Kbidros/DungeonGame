@@ -28,8 +28,4 @@ public class Main {
         Game game = new Game(player, monsters);
         game.startGame();
     }
-
-    public static void debugReceiveExperience(int amountOfExp, Player player) {
-    }
-
 }

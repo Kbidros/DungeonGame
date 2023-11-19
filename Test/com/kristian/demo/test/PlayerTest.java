@@ -17,6 +17,7 @@ class PlayerTest {
             80
     );
 
+    // Testing if player can die
     @Test
     public void testPlayerLoses() {
         player.takeDamageFromMonster(player.getMaxHP());
@@ -24,6 +25,7 @@ class PlayerTest {
         assertFalse(player.playerIsAlive());
     }
 
+    // Testing if player can gain levels
     @Test
     public void increasePlayerLevel(){
         player.setLevel(player.getLevel() + 1);
@@ -31,6 +33,7 @@ class PlayerTest {
         assertEquals(2, player.getLevel());
     }
 
+    // Testing if player damage is actually the damage player is capable of doing
     @Test
     public void checkActualDamage() {
         int expectedDamage = player.getBaseDamage() + (player.getStrength() + 10);

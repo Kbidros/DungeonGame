@@ -14,6 +14,7 @@ public class Player implements ICombat {
     private int level;
     private int baseDamage;
     private int currentHP;
+    private boolean isDead = false;
 
     public Player(int strength, int intelligence, int agility, int maxHP, int level, int baseDamage, int currentHP) {
         this.strength = strength;
@@ -28,9 +29,7 @@ public class Player implements ICombat {
     //ICombat fight and dodge
 
     @Override
-    public int calculateAttackDamage() {
-        return getBaseDamage() + (getStrength() + 10);
-    }
+    public int calculateAttackDamage() { return getBaseDamage() + (getStrength() + 10);}
 
     @Override
     public boolean didDodge() {
@@ -39,13 +38,16 @@ public class Player implements ICombat {
         return randomValue <= dodgeHit;
     }
 
+    // Player taking damage from monster
     public void takeDamageFromMonster(int damage) {
         currentHP -= damage;
         if (currentHP < 0) {
             currentHP = 0;
+            isDead = true;
         }
     }
 
+    // Experience needed to level up
     public void experienceToLevelUp(int amountOfExp) {
 
         experience += amountOfExp;
@@ -53,6 +55,7 @@ public class Player implements ICombat {
         }
     }
 
+    // Leveling up method
     void levelingUp() {
         // Level up once you reach 100 exp.
         if (getExperience() == 100) {
@@ -68,12 +71,14 @@ public class Player implements ICombat {
         }
     }
 
+    // Chance to double your hit based on your intelligence level
     public boolean doubleHit() {
         int doubleHitChance = getIntelligence() * 2;
         int randomValue = new Random().nextInt(100) + getIntelligence();
         return randomValue <= doubleHitChance;
     }
 
+    // Get the current stats
     public void getStatus() {
         System.out.printf(CYAN + "Name: %s %n", name);
         System.out.printf(RED + "Current HP: %d/%d %n", currentHP, maxHP);
@@ -159,5 +164,9 @@ public class Player implements ICombat {
 
     public void setCurrentHP(int currentHP) {
         this.currentHP = currentHP;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }

@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import static com.kristian.demo.Colors.*;
 import static com.kristian.demo.Colors.RESET;
-import static com.kristian.demo.Main.debugReceiveExperience;
 
 public class Game {
     Scanner sc = new Scanner(System.in);
@@ -21,7 +20,6 @@ public class Game {
         this.monsters = monsters;
     }
 
-
     private static void sleepForMilliseconds(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -29,44 +27,46 @@ public class Game {
         }
     }
 
-
+    // Starting the game & entering the first menu
     public void startGame() {
-        System.out.println(GREEN + "Welcome to the Dungeon Game!");
-        System.out.println(GREEN + "What's your name soldier?" + RESET);
+        System.out.println(YELLOW + "In a world surrounded by monstrous forces, \nyou stand as the last hope for humanity. \nWe need you rise to the challenge and reclaim a kingdom lost to the shadows." + RESET);
+        System.out.println(BLUE + "What's your name soldier?" + RESET);
 
         player.setName(sc.nextLine());
-        System.out.println(CYAN + "Alright " + player.getName() + "," + " what would you like to do?" + RESET);
+        System.out.println(YELLOW + "Alright " + player.getName() + "," + " what would you like to do?" + RESET);
 
         boolean quit = false;
         do {
-            System.out.println("1.Look for monsters and fight!\n2.Status\n3.Exit Game\n0. Debug Experience");
+            System.out.println("1.Look for monsters and fight!\n2.Status\n3.Exit Game");
 
             int userChoice = sc.nextInt();
             sc.nextLine();
 
             switch (userChoice) {
-                case 1 -> act(player);
+                case 1 -> {
+                    act(player);
+                    if (player.isDead()) {
+                        System.out.println("The monsters are now invading this world!");
+                        quit = true;
+                    }
+                }
                 case 2 -> player.getStatus();
                 case 3 -> quit = true;
-                case 4 -> debugReceiveExperience(125, player);
 
                 default -> System.out.println("Incorrect input, please try again");
             }
         } while (!quit);
         System.out.println("Thanks for playing, see you next time!");
         sc.close();
-
-
     }
 
+    // Player choice and fight menu
     public void act(Player player) {
 
         System.out.println(YELLOW + "<<<<<<<<<<<<<<<<<<<< Monster approaching >>>>>>>>>>>>>>>>>>>>" + RESET);
         Monster monster = monsters.get(new Random().nextInt(monsters.size()));
         System.out.println(RED + "You encountered " + monster.getName() + "!" + RESET);
 
-
-        // Fight Menu
         boolean fleeSuccessful = false;
         boolean quit = false;
         do {
@@ -95,6 +95,7 @@ public class Game {
 
     }
 
+    // Method that calculates the chance of escaping a battle, based on your agility level
     public boolean flee(Player player, Monster monster) {
         int randomChance = random.nextInt(100) + 1;
         int fleeChance = player.getAgility() * 3;
@@ -108,11 +109,11 @@ public class Game {
         }
     }
 
-
+    // Method for the battle between the player and the monster
     public static void fighting(Player player, Monster monster) {
         System.out.println(YELLOW + "*************** Inside battle ***************" + RESET);
 
-        // Spelaren utför sitt anfall
+        // The player is attacking...
         int playerDamage = player.calculateAttackDamage();
         System.out.println(BLUE + "You swing your sword ⚔️" + RESET);
         sleepForMilliseconds(1500);
@@ -125,11 +126,10 @@ public class Game {
         System.out.println(YELLOW + "*********************************************" + RESET);
         sleepForMilliseconds(1500);
 
-
-        // Monstret tar skada
+        // The monster is taking damage
         monster.takeDamageFromPlayer(playerDamage);
 
-        // Kontrollera om monstret är dött
+        // Checking if the monster is dead
         if (monster.getCurrentHP() == 0) {
             System.out.println(GREEN + "Monster is DEAD!" + RESET);
             System.out.println(GREEN + "You gained 50 EXP!" + RESET);
@@ -141,28 +141,27 @@ public class Game {
             return;
         }
 
-        // Monstret gör sitt anfall
+        // Monster attacking player
         int monsterDamage = monster.calculateAttackDamage();
         System.out.println(RED + monster.getName() + " swings at you!");
         sleepForMilliseconds(1500);
         if (player.didDodge()) {
             System.out.println(GREEN + "You skillfully dodge the monster's attack!" + RESET);
-            return; // Sluta striden om spelaren undviker attacken
+            return;
         }
 
         System.out.println(RED + "ouch! You took " + monsterDamage + " damage!" + RESET);
 
-        // Spelaren tar skada
+        // Player is taking damage
         player.takeDamageFromMonster(monsterDamage);
 
-        // Kontrollera om spelaren är död
+        // Checking if player is dead
         if (player.getCurrentHP() == 0) {
             System.out.println(RED_BACKGROUND + "Oh no, you died!" + RESET);
             return;
         }
 
-        // Uppdatera spelarens och monstrets hälsa
-
+        // Updating the player and monsters health
         System.out.println(CYAN + "Your health: " + player.getCurrentHP() + "/" + player.getMaxHP() + RESET);
         System.out.println(CYAN + "Monster's health: " + monster.getCurrentHP() + "/" + monster.getMaxHP() + RESET);
     }
