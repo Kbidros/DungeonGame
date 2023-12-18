@@ -10,6 +10,7 @@ import static com.kristian.demo.Colors.RESET;
 public class Game {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
+    DBConnection dbConnection = new DBConnection();
 
     Player player;
     ArrayList<Monster> monsters;
@@ -18,6 +19,24 @@ public class Game {
     public Game(Player player, ArrayList<Monster> monsters) {
         this.player = player;
         this.monsters = monsters;
+    }
+
+    public Game() {
+
+    }
+
+    private void initializePlayer() {
+        player = new Player(5,5,5,80,1,5,80);
+    }
+    private void initializeMonsters() {
+        monsters = new ArrayList<>();
+        monsters.add(new Monster(2, 25, 25, 3, "Giant Mosquito"));
+        monsters.add(new Monster(5, 35, 35, 6, "Zombie"));
+        monsters.add(new Monster(7, 50, 50, 9, "King Cobra"));
+        monsters.add(new Monster(12, 68, 68, 14, "Black Dragon"));
+        monsters.add(new Monster(17, 75, 75, 20, "Bloodthirsty Vampire"));
+        monsters.add(new Monster(20, 89, 89, 22, "Bowser"));
+        monsters.add(new Monster(24, 100, 100, 26, "Godzilla"));
     }
 
     private static void sleepForMilliseconds(int milliseconds) {
@@ -29,6 +48,8 @@ public class Game {
 
     // Starting the game & entering the first menu
     public void startGame() {
+        initializePlayer();
+        initializeMonsters();
         System.out.println(YELLOW + "In a world surrounded by monstrous forces, \nyou stand as the last hope for humanity. \nWe need you rise to the challenge and reclaim a kingdom lost to the shadows." + RESET);
         System.out.println(BLUE + "What's your name soldier?" + RESET);
 

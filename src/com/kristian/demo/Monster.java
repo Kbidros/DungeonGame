@@ -1,5 +1,7 @@
 package com.kristian.demo;
 
+import java.util.ArrayList;
+
 public class Monster implements ICombat {
 
     private final int strength;
