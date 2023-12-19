@@ -11,7 +11,7 @@ public class DBConnection {
     public void open() {
         try {
             connection = DriverManager.getConnection(URL, USER, password);
-            System.out.println("Database connected");
+
 
         } catch (
                 SQLException e) {
@@ -30,49 +30,51 @@ public class DBConnection {
         }
     }
 
-    public String createTablePlayer() {
-        String sql = "CREATE TABLE player (playerID INT NOT NULL AUTO_INCREMENT, name VARCHAR(60), health INT, primary KEY(playerID))";
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-
-            System.out.println(e);
-
-            return "Something went wrong";
-
-        }
-        return "Table created";
-    }
-
-    public String createTableMonster() {
-        String sql = "CREATE TABLE monster (monsterID INT NOT NULL AUTO_INCREMENT, type VARCHAR(100), primary KEY(monsterID))";
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-
-            System.out.println(e);
-
-            return "Something went wrong";
-
-        }
-        return "Table created";
-    }
 
     public int createPlayer (Player newPlayer) {
 
         int incrementID = 0;
-        String sql = "INSERT INTO player (name, health ) values (?, ?)";
+        String sql = "INSERT INTO player (Name, Lvl, CurrentHP, MaxHP, Strength, Intelligence, Agility, BaseDamage ) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
+        open();
         try {
 
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, newPlayer.getName());
-            preparedStatement.setInt(2, newPlayer.getMaxHP());
+            preparedStatement.setInt(2, newPlayer.getLevel());
+            preparedStatement.setInt(3, newPlayer.getCurrentHP());
+            preparedStatement.setInt(4, newPlayer.getMaxHP());
+            preparedStatement.setInt(5, newPlayer.getStrength());
+            preparedStatement.setInt(6, newPlayer.getIntelligence());
+            preparedStatement.setInt(7, newPlayer.getAgility());
+            preparedStatement.setInt(8, newPlayer.getBaseDamage());
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            while (generatedKeys.next()) {
+                incrementID = generatedKeys.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return incrementID;
+    }
+    public int createMonster (Monster newMonster) {
+
+        int incrementID = 0;
+        String sql = "INSERT INTO monster (Name, CurrentHP, MaxHP, Strength, BaseDamage ) values (?, ?, ?, ?, ?)";
+
+        open();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newMonster.getName());
+            preparedStatement.setInt(2, newMonster.getCurrentHP());
+            preparedStatement.setInt(3, newMonster.getMaxHP());
+            preparedStatement.setInt(4, newMonster.getStrength());
+            preparedStatement.setInt(5, newMonster.getBaseDamage());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             while (generatedKeys.next()) {
@@ -87,15 +89,22 @@ public class DBConnection {
         return incrementID;
     }
 
-    public int updatePlayerHealth(int health, int id) {
+    public int updatePlayerStats(int playerId, int Lvl, int CurrentHP, int MaxHP, int Strength, int Intelligence, int Agility, int BaseDamage) {
 
-        String sql = "UPDATE player set health = ? where PlayerID = ?";
+        String sql = "UPDATE player SET Lvl = ?, CurrentHP = ?, MaxHP = ?, Strength = ?, Intelligence = ?, Agility = ?, BaseDamage = ? WHERE playerID = ?";
         int affectedRows = 0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, health);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, Lvl);
+            preparedStatement.setInt(2, CurrentHP);
+            preparedStatement.setInt(3, MaxHP);
+            preparedStatement.setInt(4, Strength);
+            preparedStatement.setInt(5, Intelligence);
+            preparedStatement.setInt(6, Agility);
+            preparedStatement.setInt(7, BaseDamage);
+            preparedStatement.setInt(8, playerId);
+
+            affectedRows = preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

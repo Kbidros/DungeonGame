@@ -27,6 +27,7 @@ public class Game {
 
     private void initializePlayer() {
         player = new Player(5,5,5,80,1,5,80);
+
     }
     private void initializeMonsters() {
         monsters = new ArrayList<>();
@@ -54,6 +55,7 @@ public class Game {
         System.out.println(BLUE + "What's your name soldier?" + RESET);
 
         player.setName(sc.nextLine());
+        dbConnection.createPlayer(player);
         System.out.println(YELLOW + "Alright " + player.getName() + "," + " what would you like to do?" + RESET);
 
         boolean quit = false;
@@ -86,6 +88,7 @@ public class Game {
 
         System.out.println(YELLOW + "<<<<<<<<<<<<<<<<<<<< Monster approaching >>>>>>>>>>>>>>>>>>>>" + RESET);
         Monster monster = monsters.get(new Random().nextInt(monsters.size()));
+        dbConnection.createMonster(monster);
         System.out.println(RED + "You encountered " + monster.getName() + "!" + RESET);
 
         boolean fleeSuccessful = false;

@@ -5,6 +5,7 @@ import java.util.Random;
 import static com.kristian.demo.Colors.*;
 
 public class Player implements ICombat {
+    private int id;
     private String name;
     private int strength;
     private int intelligence;
@@ -165,6 +166,8 @@ public class Player implements ICombat {
     public void setCurrentHP(int currentHP) {
         this.currentHP = currentHP;
     }
+
+    public int getId() {return id;}
 
     public boolean isDead() {
         return isDead;
