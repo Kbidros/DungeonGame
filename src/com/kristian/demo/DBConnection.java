@@ -89,20 +89,20 @@ public class DBConnection {
         return incrementID;
     }
 
-    public int updatePlayerStats(int playerId, int Lvl, int CurrentHP, int MaxHP, int Strength, int Intelligence, int Agility, int BaseDamage) {
+    public int updatePlayerStats (Player player) {
 
         String sql = "UPDATE player SET Lvl = ?, CurrentHP = ?, MaxHP = ?, Strength = ?, Intelligence = ?, Agility = ?, BaseDamage = ? WHERE playerID = ?";
         int affectedRows = 0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, Lvl);
-            preparedStatement.setInt(2, CurrentHP);
-            preparedStatement.setInt(3, MaxHP);
-            preparedStatement.setInt(4, Strength);
-            preparedStatement.setInt(5, Intelligence);
-            preparedStatement.setInt(6, Agility);
-            preparedStatement.setInt(7, BaseDamage);
-            preparedStatement.setInt(8, playerId);
+            preparedStatement.setInt(1, player.getLevel());
+            preparedStatement.setInt(2, player.getCurrentHP());
+            preparedStatement.setInt(3, player.getMaxHP());
+            preparedStatement.setInt(4, player.getStrength());
+            preparedStatement.setInt(5, player.getIntelligence());
+            preparedStatement.setInt(6, player.getAgility());
+            preparedStatement.setInt(7, player.getBaseDamage());
+            preparedStatement.setInt(8, player.getId());
 
             affectedRows = preparedStatement.executeUpdate();
 
@@ -112,7 +112,7 @@ public class DBConnection {
         return affectedRows;
     }
 
-    public String getPlayerWithId(int id) {
+    public String getPlayerWithId (int id) {
 
         String sql = "SELECT * from player where PlayerID = ?";
         String playerName;
@@ -131,8 +131,5 @@ public class DBConnection {
         }
         return null;
     }
-
-
-
 
 }

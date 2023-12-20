@@ -27,7 +27,6 @@ public class Game {
 
     private void initializePlayer() {
         player = new Player(5,5,5,80,1,5,80);
-
     }
     private void initializeMonsters() {
         monsters = new ArrayList<>();
@@ -102,7 +101,7 @@ public class Game {
             switch (userChoice) {
                 case 1:
                     fighting(player, monster);
-                    break;
+                     break;
                 case 2:
                     player.getStatus();
                     break;
@@ -117,7 +116,10 @@ public class Game {
             }
         } while (player.playerIsAlive() && monster.monsterIsAlive() && !fleeSuccessful);
 
+
     }
+
+
 
     // Method that calculates the chance of escaping a battle, based on your agility level
     public boolean flee(Player player, Monster monster) {
@@ -179,11 +181,16 @@ public class Game {
         // Player is taking damage
         player.takeDamageFromMonster(monsterDamage);
 
+
+
         // Checking if player is dead
         if (player.getCurrentHP() == 0) {
             System.out.println(RED_BACKGROUND + "Oh no, you died!" + RESET);
             return;
         }
+
+
+
 
         // Updating the player and monsters health
         System.out.println(CYAN + "Your health: " + player.getCurrentHP() + "/" + player.getMaxHP() + RESET);

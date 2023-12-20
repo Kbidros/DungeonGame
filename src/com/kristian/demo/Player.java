@@ -5,8 +5,8 @@ import java.util.Random;
 import static com.kristian.demo.Colors.*;
 
 public class Player implements ICombat {
-    private int id;
     private String name;
+    private int id;
     private int strength;
     private int intelligence;
     private int agility;
@@ -26,6 +26,7 @@ public class Player implements ICombat {
         this.baseDamage = baseDamage;
         this.currentHP = currentHP;
     }
+
 
     //ICombat fight and dodge
 

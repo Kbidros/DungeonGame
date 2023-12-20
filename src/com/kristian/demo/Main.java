@@ -6,7 +6,6 @@ public class Main {
 
         DBConnection db = new DBConnection();
         db.open();
-
         Game game = new Game();
         game.startGame();
     }
