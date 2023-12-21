@@ -1,5 +1,6 @@
 package com.kristian.demo;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 
 public class DBConnection {
@@ -53,6 +54,7 @@ public class DBConnection {
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             while (generatedKeys.next()) {
                 incrementID = generatedKeys.getInt(1);
+                newPlayer.setId(incrementID);
             }
 
         } catch (SQLException e) {
@@ -92,9 +94,11 @@ public class DBConnection {
     public int updatePlayerStats (Player player) {
 
         String sql = "UPDATE player SET Lvl = ?, CurrentHP = ?, MaxHP = ?, Strength = ?, Intelligence = ?, Agility = ?, BaseDamage = ? WHERE playerID = ?";
-        int affectedRows = 0;
+        int incrementID = 0;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            int playerID = player.getId();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, player.getLevel());
             preparedStatement.setInt(2, player.getCurrentHP());
             preparedStatement.setInt(3, player.getMaxHP());
@@ -102,34 +106,35 @@ public class DBConnection {
             preparedStatement.setInt(5, player.getIntelligence());
             preparedStatement.setInt(6, player.getAgility());
             preparedStatement.setInt(7, player.getBaseDamage());
-            preparedStatement.setInt(8, player.getId());
+            preparedStatement.setInt(8,player.getId());
+            int rowsAffected = preparedStatement.executeUpdate();
 
-            affectedRows = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Player updated successfully.");
+            } else {
+                System.out.println("No player with ID " + playerID + " found.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return affectedRows;
+        return incrementID;
     }
 
-    public String getPlayerWithId (int id) {
+    public ResultSet getAllPlayersFromDB() {
 
-        String sql = "SELECT * from player where PlayerID = ?";
-        String playerName;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM player";
+
+        open();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                playerName = rs.getString("name");
-                return playerName;
-            }
-            rs.close();
+            PreparedStatement preparedStatement= connection.prepareStatement(sql);
+            rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            System.out.println(e);
-
+            e.printStackTrace();
         }
-        return null;
+        return rs;
     }
+
 
 }

@@ -47,6 +47,7 @@ public class Player implements ICombat {
             currentHP = 0;
             isDead = true;
         }
+
     }
 
     // Experience needed to level up
@@ -169,6 +170,8 @@ public class Player implements ICombat {
     }
 
     public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
 
     public boolean isDead() {
         return isDead;

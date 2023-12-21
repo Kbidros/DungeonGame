@@ -1,5 +1,7 @@
 package com.kristian.demo;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -14,12 +16,6 @@ public class Game {
 
     Player player;
     ArrayList<Monster> monsters;
-
-
-    public Game(Player player, ArrayList<Monster> monsters) {
-        this.player = player;
-        this.monsters = monsters;
-    }
 
     public Game() {
 
@@ -46,10 +42,12 @@ public class Game {
         }
     }
 
+
     // Starting the game & entering the first menu
     public void startGame() {
         initializePlayer();
         initializeMonsters();
+        loadAllPlayers();
         System.out.println(YELLOW + "In a world surrounded by monstrous forces, \nyou stand as the last hope for humanity. \nWe need you rise to the challenge and reclaim a kingdom lost to the shadows." + RESET);
         System.out.println(BLUE + "What's your name soldier?" + RESET);
 
@@ -73,6 +71,7 @@ public class Game {
                     }
                 }
                 case 2 -> player.getStatus();
+
                 case 3 -> quit = true;
 
                 default -> System.out.println("Incorrect input, please try again");
@@ -80,6 +79,43 @@ public class Game {
         } while (!quit);
         System.out.println("Thanks for playing, see you next time!");
         sc.close();
+
+    }
+    public void loadAllPlayers() {
+        ResultSet rs = dbConnection.getAllPlayersFromDB();
+
+        if (rs == null) {
+            System.out.println("Error fetching players from the database.");
+            return;
+        }
+
+        try {
+            System.out.println(PURPLE + "All Players:");
+            while (rs.next()) {
+                int playerId = rs.getInt("PlayerID");
+                String playerName = rs.getString("Name");
+                int playerLevel = rs.getInt("Lvl");
+                int playerStrength = rs.getInt("Strength");
+                int playerIntelligence = rs.getInt("Intelligence");
+                int playerAgility = rs.getInt("Agility");
+                int playerCurrentHP = rs.getInt("CurrentHP");
+                int playerMaxHP = rs.getInt("MaxHP");
+                int playerBaseDamage = rs.getInt("BaseDamage");
+                System.out.println(BLUE + "Player ID: " + playerId + RESET +
+                        GREEN + " Name: " + playerName +  "," + RESET +
+                        RED + " Level: " + playerLevel + "," + RESET +
+                         " Strength: " + playerStrength + "," +
+                         " Intelligence: " + playerIntelligence +
+                         " Agility: " + playerAgility +  "," + RESET +
+                        RED + " CurrentHP: " + playerCurrentHP +  "," + RESET +
+                        GREEN + " MaxHP: " + playerMaxHP +  "," + RESET +
+                        BLUE + " BaseDamage: " + playerBaseDamage + RESET
+                );
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Player choice and fight menu
@@ -136,7 +172,7 @@ public class Game {
     }
 
     // Method for the battle between the player and the monster
-    public static void fighting(Player player, Monster monster) {
+    public void fighting(Player player, Monster monster) {
         System.out.println(YELLOW + "*************** Inside battle ***************" + RESET);
 
         // The player is attacking...
@@ -158,12 +194,12 @@ public class Game {
         // Checking if the monster is dead
         if (monster.getCurrentHP() == 0) {
             System.out.println(GREEN + "Monster is DEAD!" + RESET);
-            System.out.println(GREEN + "You gained 50 EXP!" + RESET);
+            System.out.println(GREEN + "You gained 100 EXP!" + RESET);
 
-            player.experienceToLevelUp(50); // Simulera att spelaren får 10 erfarenhetspoäng
+            player.experienceToLevelUp(100); // Simulera att spelaren får 10 erfarenhetspoäng
             player.levelingUp(); // Kontrollera om spelaren når nästa nivå
-
             player.setCurrentHP(player.getMaxHP());
+            dbConnection.updatePlayerStats(player);
             return;
         }
 
@@ -180,6 +216,7 @@ public class Game {
 
         // Player is taking damage
         player.takeDamageFromMonster(monsterDamage);
+        dbConnection.updatePlayerStats(player);
 
 
 
