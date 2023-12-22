@@ -2,13 +2,14 @@ package com.kristian.demo;
 
 public class Monster implements ICombat {
 
+    private int id;
     private final int strength;
     private final int maxHP;
     private int currentHP;
     private final int baseDamage;
     private final String name;
 
-    public Monster(int strength, int maxHP, int currentHP, int baseDamage, String name) {
+    public Monster(int id, int strength, int maxHP, int currentHP, int baseDamage, String name) {
         this.strength = strength;
         this.baseDamage = baseDamage;
         this.maxHP = maxHP;
@@ -58,6 +59,14 @@ public class Monster implements ICombat {
 
     public int getBaseDamage() {
         return baseDamage;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 

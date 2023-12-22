@@ -32,7 +32,7 @@ public class DBConnection {
     }
 
 
-    public int createPlayer (Player newPlayer) {
+    public int createPlayer(Player newPlayer) {
 
         int incrementID = 0;
         String sql = "INSERT INTO player (Name, Lvl, CurrentHP, MaxHP, Strength, Intelligence, Agility, BaseDamage ) values (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -64,7 +64,8 @@ public class DBConnection {
 
         return incrementID;
     }
-    public int createMonster (Monster newMonster) {
+
+    public int createMonster(Monster newMonster) {
 
         int incrementID = 0;
         String sql = "INSERT INTO monster (Name, CurrentHP, MaxHP, Strength, BaseDamage ) values (?, ?, ?, ?, ?)";
@@ -81,6 +82,7 @@ public class DBConnection {
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             while (generatedKeys.next()) {
                 incrementID = generatedKeys.getInt(1);
+                newMonster.setId(incrementID);
             }
 
         } catch (SQLException e) {
@@ -91,12 +93,11 @@ public class DBConnection {
         return incrementID;
     }
 
-    public int updatePlayerStats (Player player) {
+    public int updatePlayerStats(Player player) {
 
         String sql = "UPDATE player SET Lvl = ?, CurrentHP = ?, MaxHP = ?, Strength = ?, Intelligence = ?, Agility = ?, BaseDamage = ? WHERE playerID = ?";
         int incrementID = 0;
         try {
-            int playerID = player.getId();
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, player.getLevel());
@@ -106,20 +107,33 @@ public class DBConnection {
             preparedStatement.setInt(5, player.getIntelligence());
             preparedStatement.setInt(6, player.getAgility());
             preparedStatement.setInt(7, player.getBaseDamage());
-            preparedStatement.setInt(8,player.getId());
-            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.setInt(8, player.getId());
+            preparedStatement.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("Player updated successfully.");
-            } else {
-                System.out.println("No player with ID " + playerID + " found.");
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return incrementID;
     }
+
+    public void logCombatEvent(int playerID, int monsterID, String action, int damage) {
+
+        String sql = "INSERT INTO combat_log (playerID, monsterID, action, damageDone, timestamp) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        open();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, playerID);
+            preparedStatement.setInt(2, monsterID);
+            preparedStatement.setString(3, action);
+            preparedStatement.setInt(4, damage);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public ResultSet getAllPlayersFromDB() {
 
@@ -129,6 +143,19 @@ public class DBConnection {
         open();
         try {
             PreparedStatement preparedStatement= connection.prepareStatement(sql);
+            rs = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+    public ResultSet getCombatLogHistory() {
+        ResultSet rs = null;
+        String sql = "SELECT * FROM combat_log";
+
+        open();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();

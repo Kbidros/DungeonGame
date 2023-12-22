@@ -2,6 +2,7 @@ package com.kristian.demo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -26,13 +27,13 @@ public class Game {
     }
     private void initializeMonsters() {
         monsters = new ArrayList<>();
-        monsters.add(new Monster(2, 25, 25, 3, "Giant Mosquito"));
-        monsters.add(new Monster(5, 35, 35, 6, "Zombie"));
-        monsters.add(new Monster(7, 50, 50, 9, "King Cobra"));
-        monsters.add(new Monster(12, 68, 68, 14, "Black Dragon"));
-        monsters.add(new Monster(17, 75, 75, 20, "Bloodthirsty Vampire"));
-        monsters.add(new Monster(20, 89, 89, 22, "Bowser"));
-        monsters.add(new Monster(24, 100, 100, 26, "Godzilla"));
+        monsters.add(new Monster(1, 2, 25, 25, 3,"Giant Mosquito"));
+        monsters.add(new Monster(2, 5, 35, 35, 6,"Zombie"));
+        monsters.add(new Monster(3, 7, 50, 50, 9,"King Cobra"));
+        monsters.add(new Monster(4, 12, 68, 68, 14,"Black Dragon"));
+        monsters.add(new Monster(5, 17, 75, 75, 20,"Bloodthirsty Vampire"));
+        monsters.add(new Monster(6, 20, 89, 89, 22,"Bowser"));
+        monsters.add(new Monster(7, 24, 100, 100, 26,"Godzilla"));
     }
 
     private static void sleepForMilliseconds(int milliseconds) {
@@ -57,7 +58,7 @@ public class Game {
 
         boolean quit = false;
         do {
-            System.out.println("1.Look for monsters and fight!\n2.Status\n3.Exit Game");
+            System.out.println("1.Look for monsters and fight!\n2.Status\n3.Show Combat Log History\n4.Exit Game\"");
 
             int userChoice = sc.nextInt();
             sc.nextLine();
@@ -72,7 +73,9 @@ public class Game {
                 }
                 case 2 -> player.getStatus();
 
-                case 3 -> quit = true;
+                case 3 -> showCombatLogHistory();
+
+                case 4 -> quit = true;
 
                 default -> System.out.println("Incorrect input, please try again");
             }
@@ -112,6 +115,30 @@ public class Game {
                         BLUE + " BaseDamage: " + playerBaseDamage + RESET
                 );
 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void showCombatLogHistory() {
+        System.out.println(PURPLE + "Combat Log History:" + RESET);
+        ResultSet combatLogResultSet = dbConnection.getCombatLogHistory();
+
+        try {
+            while (combatLogResultSet.next()) {
+                int playerID = combatLogResultSet.getInt("playerID");
+                int monsterID = combatLogResultSet.getInt("monsterID");
+                String action = combatLogResultSet.getString("action");
+                int damage = combatLogResultSet.getInt("damageDone");
+                Timestamp timestamp = combatLogResultSet.getTimestamp("timestamp");
+
+                System.out.println(
+                        BLUE + "Timestamp: " + timestamp + "," + RESET +
+                        GREEN + " PlayerID: " + playerID + "," + RESET +
+                        RED   + " MonsterID: " + monsterID + "," + RESET +
+                        YELLOW + " Action: " + action + "," + RESET +
+                         PURPLE + " DamageDone: " + damage + RESET
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -177,6 +204,7 @@ public class Game {
 
         // The player is attacking...
         int playerDamage = player.calculateAttackDamage();
+        dbConnection.logCombatEvent(player.getId(), monster.getId(),"Player attacking the monster", playerDamage);
         System.out.println(BLUE + "You swing your sword ⚔️" + RESET);
         sleepForMilliseconds(1500);
         if (player.doubleHit()) {
@@ -200,11 +228,13 @@ public class Game {
             player.levelingUp(); // Kontrollera om spelaren når nästa nivå
             player.setCurrentHP(player.getMaxHP());
             dbConnection.updatePlayerStats(player);
+            dbConnection.logCombatEvent(player.getId(), monster.getId(),"Player killed the monster and leveled up!", 0);
             return;
         }
 
         // Monster attacking player
         int monsterDamage = monster.calculateAttackDamage();
+        dbConnection.logCombatEvent(player.getId(), monster.getId(), "Monster attacking player", monsterDamage);
         System.out.println(RED + monster.getName() + " swings at you!");
         sleepForMilliseconds(1500);
         if (player.didDodge()) {
