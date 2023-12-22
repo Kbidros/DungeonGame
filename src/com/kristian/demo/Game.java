@@ -43,7 +43,6 @@ public class Game {
         }
     }
 
-
     // Starting the game & entering the first menu
     public void startGame() {
         initializePlayer();
