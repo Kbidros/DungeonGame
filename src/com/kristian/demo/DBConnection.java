@@ -6,7 +6,7 @@ import java.sql.*;
 public class DBConnection {
     private String URL = "jdbc:mysql://localhost:3306/DungeonRun";
     private String USER = "root";
-    private String password = "Hol980add510#";
+    private String password = "addyourownpassword";
     private Connection connection;
 
     public void open() {
